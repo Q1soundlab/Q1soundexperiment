@@ -1,0 +1,66 @@
+ <!doctype HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+    </head>
+    
+    
+    <body>
+        <audio id="q1">
+            <source src="ANTsong320k.mp3" type="audio/mp3">
+        </audio>
+        <audio id="q2">
+            <source src="sound_bell.mp3" type="audio/mp3">
+        </audio>
+        
+        <button onclick="qsound1.play(); qsound2.play();" type="button">Play sounds</button>
+        
+        
+        <h2>Set stereo panning</h2>
+        <input class="panning-control-q1" type="range" min="-1" max="1" step="0.01" value="0">
+        <span class="panning-value-q1">0</span><br>
+        
+        <input class="panning-control-q2" type="range" min="-1" max="1" step="0.01" value="0">
+        <span class="panning-value-q2">0</span><br>
+        
+    </body>
+    
+    
+    <script>
+        var audioCtx = new (window.AudioContext || window.webkitAudioContext) ();
+        var qsound1 = document.querySelector('#q1');
+        var qsound2 = document.querySelector('#q2');
+//        var pre = document.querySelector('pre');
+        var myScript = document.querySelector('script');
+        
+        var panControl1 = document.querySelector('.panning-control-q1');
+        var panValue1 = document.querySelector('.panning-value-q1');
+        var panControl2 = document.querySelector('.panning-control-q2');
+        var panValue2 = document.querySelector('.panning-value-q2');
+        
+//        pre.innerHTML = myScript.innerHTML;
+        
+        var source1 = audioCtx.createMediaElementSource(qsound1);
+        var source2 = audioCtx.createMediaElementSource(qsound2);
+        
+        var panNode1 = audioCtx.createStereoPanner();
+        var panNode2 = audioCtx.createStereoPanner();
+        
+        panControl1.oninput = function() {
+            panNode1.pan.value = panControl1.value;
+            panValue1.innerHTML = panControl1.value;
+        }
+        panControl2.oninput = function() {
+            panNode2.pan.value = panControl2.value;
+            panValue2.innerHTML = panControl2.value;
+        }
+        
+        source1.connect(panNode1);
+        panNode1.connect(audioCtx.destination);
+        source2.connect(panNode2);
+        panNode2.connect(audioCtx.destination);
+        
+    </script>
+
+</html>
